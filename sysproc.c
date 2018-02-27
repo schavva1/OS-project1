@@ -56,6 +56,18 @@ sys_sbrk(void)
   return addr;
 }
 
+int 
+sys_shutdown(void)
+{
+	char *x= "shutdown";
+	for(;*x;x++)
+	{
+		outw(0xB004, 0x0|0x2000);
+		//outb(0x604, 0x0|0x2000);
+	}
+	return 0;
+}
+
 int
 sys_sleep(void)
 {

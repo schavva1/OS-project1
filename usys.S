@@ -30,3 +30,5 @@ SYSCALL(sbrk)
 SYSCALL(sleep)
 SYSCALL(uptime)
 SYSCALL(enable_sched_trace)
+SYSCALL(shutdown)
+
