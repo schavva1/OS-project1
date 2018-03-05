@@ -17,5 +17,6 @@ main(int argc, char * argv[])
 {
     printf(1, "BYE~\n");
     shutdown();
-    exit(); //return 0;
+    exit();
+    return 0;
 }
