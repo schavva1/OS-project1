@@ -11,6 +11,7 @@
 #define BACK  5
 
 #define MAXARGS 10
+int background=0;
 
 struct cmd {
   int type;
@@ -75,7 +76,7 @@ runcmd(struct cmd *cmd)
     if(ecmd->argv[0] == 0)
       exit();
     exec(ecmd->argv[0], ecmd->argv);
-    printf(2, "exec %s failed\n", ecmd->argv[0]);
+    printf(2, "cannot run this command %s\n", ecmd->argv[0]);
     break;
 
   case REDIR:
@@ -125,6 +126,8 @@ runcmd(struct cmd *cmd)
     if(fork1() == 0)
       runcmd(bcmd->cmd);
     break;
+      
+     
   }
   exit();
 }
@@ -145,6 +148,7 @@ main(void)
 {
   static char buf[100];
   int fd;
+ 
   
   // Assumes three file descriptors open.
   while((fd = open("console", O_RDWR)) >= 0){
@@ -167,9 +171,16 @@ main(void)
     if(buf[0]=='e' && buf[1] == 'x' && buf[2] == 'i'){
           kill(getpid());
           }
+    if(buf[strlen(buf)-1] == '&')
+	  {
+  		background = 1;
+  		buf[strlen(buf)-1] = '\0';
+		}
+  
      if(fork1() == 0)
-      runcmd(parsecmd(buf));
+        runcmd(parsecmd(buf));
     wait();
+	
   }
   exit();
 }
@@ -466,7 +477,7 @@ nulterminate(struct cmd *cmd)
   case EXEC:
     ecmd = (struct execcmd*)cmd;
     for(i=0; ecmd->argv[i]; i++)
-      *ecmd->eargv[i] = 0;
+      *ecmd->eargv[i] = 0;  
     break;
 
   case REDIR:
